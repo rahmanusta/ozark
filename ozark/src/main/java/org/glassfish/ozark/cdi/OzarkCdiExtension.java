@@ -39,6 +39,19 @@
  */
 package org.glassfish.ozark.cdi;
 
+import org.glassfish.ozark.MvcContextImpl;
+import org.glassfish.ozark.binding.BindingInterceptorImpl;
+import org.glassfish.ozark.binding.BindingResultImpl;
+import org.glassfish.ozark.core.*;
+import org.glassfish.ozark.engine.FaceletsViewEngine;
+import org.glassfish.ozark.engine.JspViewEngine;
+import org.glassfish.ozark.engine.ViewEngineFinder;
+import org.glassfish.ozark.security.CsrfImpl;
+import org.glassfish.ozark.security.CsrfProtectFilter;
+import org.glassfish.ozark.security.CsrfValidateInterceptor;
+import org.glassfish.ozark.security.EncodersImpl;
+import org.glassfish.ozark.util.CdiUtils;
+
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.BeanManager;
@@ -123,5 +136,45 @@ public class OzarkCdiExtension implements Extension {
      */
     public static synchronized boolean isEventObserved(Class<? extends MvcEvent> eventType) {
         return observedEvents == null ? false : observedEvents.contains(eventType);
+    }
+
+    /**
+     * Registers CDI beans explicitly to meet Glassfish Module
+     *
+     * @param beforeBean The BeforeBeanDiscovery
+     * @param beanManager The BeanManager
+     */
+    public void register(@Observes BeforeBeanDiscovery beforeBean, BeanManager beanManager) {
+        CdiUtils.addAnnotatedTypes(beforeBean, beanManager,
+
+                // .
+                MvcContextImpl.class,
+
+                // binding
+                BindingResultImpl.class,
+                BindingInterceptorImpl.class,
+
+                // core
+                Messages.class,
+                ModelsImpl.class,
+                ViewableWriter.class,
+                ViewRequestFilter.class,
+                ViewResponseFilter.class,
+
+                // engine
+                FaceletsViewEngine.class,
+                JspViewEngine.class,
+                ViewEngineFinder.class,
+
+                // security
+                CsrfImpl.class,
+                CsrfProtectFilter.class,
+                CsrfValidateInterceptor.class,
+                EncodersImpl.class,
+
+                // util
+                CdiUtils.class
+
+        );
     }
 }
