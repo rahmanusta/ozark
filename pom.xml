@@ -3,7 +3,7 @@
     <groupId>org.glassfish.ozark</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-m03-SNAPSHOT</version>
+    <version>${ozark.version}</version>
     <name>Ozark ${project.version} Parent Project</name>
     <parent>
         <groupId>net.java</groupId>
@@ -17,6 +17,7 @@
     </modules>
     <properties>
         <jersey.version>2.21.1</jersey.version>
+        <ozark.version>1.0.0-m03-SNAPSHOT</ozark.version>
     </properties>
     <reporting>
         <excludeDefaults>true</excludeDefaults>
