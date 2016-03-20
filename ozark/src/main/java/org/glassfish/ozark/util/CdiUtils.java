@@ -43,6 +43,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.inject.Inject;
 import java.util.Set;
 
@@ -86,5 +87,17 @@ public class CdiUtils {
         final Bean<T> bean = (Bean<T>) bm.resolve(beans);
         final CreationalContext<T> ctx = bm.createCreationalContext(bean);
         return (T) bm.getReference(bean, clazz, ctx);
+    }
+
+    /**
+     *
+     * @param beforeBean The BeforeBeanDiscovery.
+     * @param beanManager The BeanManager.
+     * @param types annotated types to register
+     */
+    public static void addAnnotatedTypes(BeforeBeanDiscovery beforeBean, BeanManager beanManager, Class<?>... types) {
+        for (Class<?> type : types) {
+            beforeBean.addAnnotatedType(beanManager.createAnnotatedType(type), null);
+        }
     }
 }
